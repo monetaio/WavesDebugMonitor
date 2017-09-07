@@ -17,9 +17,13 @@ class Main {
   }
 
   run() {
+    let r2 = this.loadDebugInfo();
+
     let requests = {
       "version": this.loadVersions(),
-      "seed": this.loadSeed()
+      "seed": this.loadSeed(),
+      "debugInfoTop": r2,
+      "debugInfoBottom": r2
     };
 
     Promise
@@ -43,6 +47,20 @@ class Main {
           let r = {};
           r[node] = {
             version: response.version
+          };
+          return r;
+        })
+    });
+  }
+
+  loadDebugInfo() {
+    return this.load((node) => {
+      return this.apiRequest("GET", node, "/debug/info")
+        .then((response) => {
+          let r = {};
+          r[node] = {
+            debugInfoTop: response.blockchainDebugInfo.top.height,
+            debugInfoBottom: response.blockchainDebugInfo.bottom.height
           };
           return r;
         })
@@ -74,7 +92,7 @@ class Main {
   apiRequest(method, rest, action) {
     let apiKey = this.domApiKey.value;
     return Utils.jsonHttpRequest(method, "http://" + rest + action, {
-      // api_key: apiKey
+      api_key: apiKey
     });
   }
 
