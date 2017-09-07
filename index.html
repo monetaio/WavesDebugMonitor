@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="third-party/tablesort-5.0.1/dist/tablesort.css"/>
+</head>
+<body>
+<label>API key: <input class="api-key" value=""></label>
+<table class="nodes"></table>
+<pre class="errors"></pre>
+<button class="collect" onclick="MainApp.run()">Collect</button>
+
+<script id="nodes-template" type="text/x-handlebars-template">
+    <table class="nodes">
+        <thead>
+        <tr>
+            <th>node</th>
+            {{#each attrs}}
+            <th>{{this}}</th>
+            {{/each}}
+        </tr>
+        </thead>
+        <tbody>
+        {{#each nodes}}
+        <tr>
+            <td>{{@key}}</td>
+            {{#each this}}
+            <td>{{this}}</td>
+            {{/each}}
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
+</script>
+<script src="third-party/lodash.min.js"></script>
+<script src="third-party/handlebars-v4.0.10.min.js"></script>
+<script src="third-party/tablesort-5.0.1/dist/tablesort.min.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/main.js"></script>
+</body>
