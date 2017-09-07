@@ -17,15 +17,17 @@ class Main {
   }
 
   run() {
+    let requests = {
+      "version": this.loadVersions(),
+      "seed": this.loadSeed()
+    };
+
     Promise
-      .all([
-        this.loadVersions(),
-        //this.loadSeed()
-      ])
+      .all(Object.values(requests))
       .then((data) => mergeAll(data))
       .then((nodes) => {
         this.refreshTable({
-          attrs: ["version", "seed"],
+          attrs: Object.keys(requests),
           nodes: nodes
         })
       })
