@@ -23,7 +23,8 @@ class Main {
       .all([
         this.loadVersions(),
         this.loadSeed(),
-        this.loadDebugInfo()
+        this.loadDebugInfo(),
+        this.loadMinerInfo()
       ])
       .then((data) => mergeAll(data))
       .then((nodes) => {
@@ -55,25 +56,55 @@ class Main {
       return this.apiRequest("GET", node, "/debug/info")
         .then((response) => {
           return {
-            debugInfoTop: response.blockchainDebugInfo.top.height,
-            debugInfoBottom: response.blockchainDebugInfo.bottom.height
+            STATE: response.stateHeight +  "," + response.stateHash,
+            persisted: response.blockchainDebugInfo.persisted.height + "," +  response.blockchainDebugInfo.persisted.hash,
+            bottom: response.blockchainDebugInfo.bottom.height + "," + response.blockchainDebugInfo.bottom.hash,
+            top: response.blockchainDebugInfo.top.height + "," + response.blockchainDebugInfo.top.hash,
+            microHash: response.blockchainDebugInfo.microBaseHash,
+            lastBlockId : response.blockchainDebugInfo.lastBlockId.substring(0, 7) + "..."
           };
         })
         .catch((e) => {
           return {
-            debugInfoTop: e.message,
-            debugInfoBottom: e.message
+            stateHeight: e.message,
+            persisted: e.message,
+            bottom: e.message,
+            top: e.message,
+            microHash: e.message,
+            lastBlockId : e.message
           };
         })
     });
   }
+
+  loadMinerInfo() {
+    return this.load((node) => {
+      return this.apiRequest("GET", node, "/debug/minerInfo")
+        .then((response) => {
+          return {
+            address: response[0].address,
+            miningBalance: response[0].miningBalance / 10000 + " waves",
+          //  timestamp: response[0].timestamp,
+            in: (response[0].timestamp - new Date())/1000 + " seconds"
+          };
+        })
+        .catch((e) => {
+          return {
+            address: "???",
+            miningBalance: "???",
+            timestamp: "???"
+          };
+        })
+    });
+  }
+
 
   loadSeed() {
     return this.load((node) => {
       return this.apiRequest("GET", node, "/wallet/seed")
         .then((response) => {
           return {
-            seed: response.seed
+            seed: response.seed.substring(0, 7) + "..."
           };
         })
         .catch((e) => {

@@ -2,9 +2,17 @@
 <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="third-party/tablesort-5.0.1/dist/tablesort.css"/>
+    <style type="text/css">
+    td{
+        padding: 1em;
+    }
+    table{
+        font-family: monospace;
+    }
+    </style>
 </head>
 <body>
-<label>API key: <input class="api-key" value=""></label>
+<label>API key: <input class="api-key" value="integration-test-rest-api"></label>
 <table class="nodes"></table>
 <button class="collect" onclick="MainApp.run()">Collect</button>
 
