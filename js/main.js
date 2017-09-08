@@ -4,6 +4,10 @@ function mergeAll(objs) {
   return _.merge.apply(_, objs);
 }
 
+function collectKeys(objs) {
+  return _.uniq(_.flatMap(objs, (o) => Object.keys(o)));
+}
+
 class Main {
   constructor(nodes) {
     this.nodes = nodes;
@@ -17,21 +21,16 @@ class Main {
   }
 
   run() {
-    let debugInfo = this.loadDebugInfo();
-
-    let requests = {
-      "version": this.loadVersions(),
-      "seed": this.loadSeed(),
-      "debugInfoTop": debugInfo,
-      "debugInfoBottom": debugInfo
-    };
-
     Promise
-      .all(Object.values(requests))
+      .all([
+        this.loadVersions(),
+        this.loadSeed(),
+        this.loadDebugInfo()
+      ])
       .then((data) => mergeAll(data))
       .then((nodes) => {
         this.refreshTable({
-          attrs: Object.keys(requests),
+          attrs: collectKeys(Object.values(nodes)),
           nodes: nodes
         })
       })
