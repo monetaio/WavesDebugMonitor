@@ -12,8 +12,6 @@ class Main {
   constructor(nodes) {
     this.nodes = nodes;
     this.domNodes = document.querySelector(".nodes");
-    this.domErrors = document.querySelector(".errors");
-
     this.domApiKey = document.querySelector(".api-key");
 
     let nodesTemplate = document.querySelector("#nodes-template").innerText;
@@ -33,9 +31,6 @@ class Main {
           attrs: collectKeys(Object.values(nodes)),
           nodes: nodes
         })
-      })
-      .catch(e => {
-        this.domErrors.innerText = e.name + ': ' + e.message;
       });
   }
 
