@@ -17,13 +17,13 @@ class Main {
   }
 
   run() {
-    let r2 = this.loadDebugInfo();
+    let debugInfo = this.loadDebugInfo();
 
     let requests = {
       "version": this.loadVersions(),
       "seed": this.loadSeed(),
-      "debugInfoTop": r2,
-      "debugInfoBottom": r2
+      "debugInfoTop": debugInfo,
+      "debugInfoBottom": debugInfo
     };
 
     Promise
@@ -44,11 +44,14 @@ class Main {
     return this.load((node) => {
       return this.apiRequest("GET", node, "/node/version")
         .then((response) => {
-          let r = {};
-          r[node] = {
+          return {
             version: response.version
           };
-          return r;
+        })
+        .catch((e) => {
+          return {
+            version: e.message
+          };
         })
     });
   }
@@ -57,12 +60,16 @@ class Main {
     return this.load((node) => {
       return this.apiRequest("GET", node, "/debug/info")
         .then((response) => {
-          let r = {};
-          r[node] = {
+          return {
             debugInfoTop: response.blockchainDebugInfo.top.height,
             debugInfoBottom: response.blockchainDebugInfo.bottom.height
           };
-          return r;
+        })
+        .catch((e) => {
+          return {
+            debugInfoTop: e.message,
+            debugInfoBottom: e.message
+          };
         })
     });
   }
@@ -71,17 +78,30 @@ class Main {
     return this.load((node) => {
       return this.apiRequest("GET", node, "/wallet/seed")
         .then((response) => {
-          let r = {};
-          r[node] = {
+          return {
             seed: response.seed
           };
-          return r;
+        })
+        .catch((e) => {
+          return {
+            seed: e.message
+          };
         })
     });
   }
 
   load(f) {
-    return Promise.all(this.nodes.map(f)).then((all) => mergeAll(all));
+    return Promise
+      .all(
+        this.nodes.map((node => {
+          return f(node).then((r) => {
+            let final = {};
+            final[node] = r;
+            return final;
+          });
+        }))
+      )
+      .then((all) => mergeAll(all));
   }
 
   refreshTable(data) {
