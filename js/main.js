@@ -25,6 +25,7 @@ class Main {
         .all([
           this.loadVersions(),
           // this.loadSeed(),
+          this.loadBasetarget(),
           this.loadUtx(),
           this.loadDebugInfo(),
           this.loadHistoryInfo(),
@@ -142,6 +143,25 @@ class Main {
             miningBalance: "???",
             // timestamp = "???"
             in: "???"
+          };
+        })
+    });
+  }
+
+
+  loadBasetarget() {
+    return this.load((node) => {
+      return this.apiRequest("GET", node, "/consensus/basetarget")
+        .then((response) => {
+          return {
+            score: response.score,
+            // baseTarget : response.baseTarget
+          };
+        })
+        .catch((e) => {
+          return {
+            score: e.message,
+            baseTarget: e.message
           };
         })
     });
