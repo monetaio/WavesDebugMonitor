@@ -51,6 +51,24 @@ class Main {
     });
   }
 
+
+  loadUtx() {
+    return this.load((node) => {
+      return this.apiRequest("GET", node, "/transactions/unconfirmed/size")
+        .then((response) => {
+          return {
+            UTX: response.size
+          };
+        })
+        .catch((e) => {
+          return {
+            version: e.message
+          };
+        })
+    });
+  }
+
+
   loadDebugInfo() {
     return this.load((node) => {
       return this.apiRequest("GET", node, "/debug/info")
@@ -60,8 +78,8 @@ class Main {
             persisted: response.blockchainDebugInfo.persisted.height + "," +  response.blockchainDebugInfo.persisted.hash,
             bottom: response.blockchainDebugInfo.bottom.height + "," + response.blockchainDebugInfo.bottom.hash,
             top: response.blockchainDebugInfo.top.height + "," + response.blockchainDebugInfo.top.hash,
-            microHash: response.blockchainDebugInfo.microBaseHash,
-            lastBlockId : response.blockchainDebugInfo.lastBlockId.substring(0, 7) + "..."
+            microHash: response.blockchainDebugInfo.microBaseHash
+         //   lastBlockId : response.blockchainDebugInfo.lastBlockId.substring(0, 7) + "..."
           };
         })
         .catch((e) => {
@@ -70,20 +88,43 @@ class Main {
             persisted: e.message,
             bottom: e.message,
             top: e.message,
-            microHash: e.message,
-            lastBlockId : e.message
+            microHash: e.message
+       //     lastBlockId : e.message
           };
         })
     });
   }
+
+  loadHistoryInfo() {
+    return this.load((node) => {
+      return this.apiRequest("GET", node, "/debug/historyInfo")
+        .then((response) => {
+          return {
+            lastMicros: response.microBlockIds.map( function(bid) {
+              return bid.substring(0, 4) + "..~>"
+            }).join('\n'),
+            lastBlocks: response.lastBlockIds.map( function(bid) {
+              return bid.substring(0, 4) + "..->"
+            }).join('\n'),
+          };
+        })
+        .catch((e) => {
+          return {
+            lastMicros: e.message,
+            lastBlocks: e.message,
+          };
+        })
+    });
+  }
+
 
   loadMinerInfo() {
     return this.load((node) => {
       return this.apiRequest("GET", node, "/debug/minerInfo")
         .then((response) => {
           return {
-            address: response[0].address,
-            miningBalance: response[0].miningBalance / 10000 + " waves",
+            address: response[0].address.substring(0, 7) + "...",
+            miningBalance: "~" + Math.ceil(response[0].miningBalance / 10000000) + " waves",
           //  timestamp: response[0].timestamp,
             in: (response[0].timestamp - new Date())/1000 + " seconds"
           };
@@ -92,7 +133,8 @@ class Main {
           return {
             address: "???",
             miningBalance: "???",
-            timestamp: "???"
+            // timestamp = "???"
+            in: "???"
           };
         })
     });
