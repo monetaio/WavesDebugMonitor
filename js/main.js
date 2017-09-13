@@ -18,22 +18,29 @@ class Main {
     this.renderNodes = Handlebars.compile(nodesTemplate);
   }
 
+
   run() {
-    Promise
-      .all([
-        this.loadVersions(),
-        this.loadSeed(),
-        this.loadDebugInfo(),
-        this.loadMinerInfo()
-      ])
-      .then((data) => mergeAll(data))
-      .then((nodes) => {
-        this.refreshTable({
-          attrs: collectKeys(Object.values(nodes)),
-          nodes: nodes
-        })
-      });
-  }
+    setTimeout(() => {
+      Promise
+        .all([
+          this.loadVersions(),
+          // this.loadSeed(),
+          this.loadUtx(),
+          this.loadDebugInfo(),
+          this.loadHistoryInfo(),
+          this.loadMinerInfo(),
+        ])
+        .then((data) => mergeAll(data))
+        .then((nodes) => {
+          this.refreshTable({
+            attrs: collectKeys(Object.values(nodes)),
+            nodes: nodes
+          });
+          this.run();
+        });
+    }
+  , 1000);
+}
 
   loadVersions() {
     return this.load((node) => {
