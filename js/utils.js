@@ -5,13 +5,15 @@ window.Utils = {
 
     return new Promise((resolve, reject) => {
       let req = new XMLHttpRequest();
+      req.timeout = 5000;
+
       req.open(method, url, true);
       for (let k in headers) {
         req.setRequestHeader(k, headers[k]);
       }
 
       req.onreadystatechange = () => {
-        if (req.readyState === 4) {
+        if (req.readyState === XMLHttpRequest.DONE) {
           if (req.status === 200) {
             resolve(JSON.parse(req.responseText));
           } else {
@@ -20,7 +22,11 @@ window.Utils = {
         }
       };
 
-      req.send();
+      try {
+        req.send();
+      } catch (e) {
+        reject(e);
+      }
     });
   }
 };
