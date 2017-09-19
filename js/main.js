@@ -76,7 +76,7 @@ class Main {
             bottom: response.blockchainDebugInfo.bottom.height + "," + response.blockchainDebugInfo.bottom.hash,
             top: response.blockchainDebugInfo.top.height + "," + response.blockchainDebugInfo.top.hash,
             microHash: response.blockchainDebugInfo.microBaseHash
-            //   lastBlockId : response.blockchainDebugInfo.lastBlockId.substring(0, 7) + "..."
+            //   lastBlockId : response.blockchainDebugInfo.lastBlockId
           };
         })
         .catch((e) => {
@@ -97,12 +97,8 @@ class Main {
       return this.apiRequest("GET", node, "/debug/historyInfo")
         .then((response) => {
           return {
-            lastMicros: response.microBlockIds.map(function (bid) {
-              return bid.substring(0, 4) + "..~>"
-            }).join('\n'),
-            lastBlocks: response.lastBlockIds.map(function (bid) {
-              return bid.substring(0, 4) + "..->"
-            }).join('\n'),
+            lastMicros: response.microBlockIds.join("<br />"),
+            lastBlocks: response.lastBlockIds.join("<br />")
           };
         })
         .catch((e) => {
@@ -120,7 +116,7 @@ class Main {
       return this.apiRequest("GET", node, "/debug/minerInfo")
         .then((response) => {
           return {
-            address: response[0].address.substring(0, 7) + "...",
+            address: response[0].address,
             miningBalance: "~" + Math.ceil(response[0].miningBalance / 10000000) + " waves",
             //  timestamp: response[0].timestamp,
             in: (response[0].timestamp - new Date()) / 1000 + " seconds"
@@ -143,7 +139,7 @@ class Main {
       return this.apiRequest("GET", node, "/wallet/seed")
         .then((response) => {
           return {
-            seed: response.seed.substring(0, 7) + "..."
+            seed: response.seed
           };
         })
         .catch((e) => {

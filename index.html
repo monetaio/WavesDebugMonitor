@@ -18,6 +18,18 @@
 
         .class_common {
             color: #FFF;
+            max-width: 110px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .class_common:hover {
+            position: absolute;
+            overflow: visible;
+            min-width: 110px;
+            max-width: initial;
+            background: #aaa;
         }
 
         .class_0 {
