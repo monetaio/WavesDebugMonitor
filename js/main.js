@@ -28,10 +28,7 @@ class Main {
       ])
       .then((data) => mergeAll(data))
       .then((nodes) => {
-        this.refreshTable({
-          attrs: collectKeys(Object.values(nodes)),
-          nodes: nodes
-        })
+        this.refreshTable(this.process(nodes))
       });
   }
 
@@ -74,12 +71,12 @@ class Main {
       return this.apiRequest("GET", node, "/debug/info")
         .then((response) => {
           return {
-            STATE: response.stateHeight +  "," + response.stateHash,
-            persisted: response.blockchainDebugInfo.persisted.height + "," +  response.blockchainDebugInfo.persisted.hash,
+            STATE: response.stateHeight + "," + response.stateHash,
+            persisted: response.blockchainDebugInfo.persisted.height + "," + response.blockchainDebugInfo.persisted.hash,
             bottom: response.blockchainDebugInfo.bottom.height + "," + response.blockchainDebugInfo.bottom.hash,
             top: response.blockchainDebugInfo.top.height + "," + response.blockchainDebugInfo.top.hash,
             microHash: response.blockchainDebugInfo.microBaseHash
-         //   lastBlockId : response.blockchainDebugInfo.lastBlockId.substring(0, 7) + "..."
+            //   lastBlockId : response.blockchainDebugInfo.lastBlockId.substring(0, 7) + "..."
           };
         })
         .catch((e) => {
@@ -89,7 +86,7 @@ class Main {
             bottom: e.message,
             top: e.message,
             microHash: e.message
-       //     lastBlockId : e.message
+            //     lastBlockId : e.message
           };
         })
     });
@@ -100,10 +97,10 @@ class Main {
       return this.apiRequest("GET", node, "/debug/historyInfo")
         .then((response) => {
           return {
-            lastMicros: response.microBlockIds.map( function(bid) {
+            lastMicros: response.microBlockIds.map(function (bid) {
               return bid.substring(0, 4) + "..~>"
             }).join('\n'),
-            lastBlocks: response.lastBlockIds.map( function(bid) {
+            lastBlocks: response.lastBlockIds.map(function (bid) {
               return bid.substring(0, 4) + "..->"
             }).join('\n'),
           };
@@ -125,8 +122,8 @@ class Main {
           return {
             address: response[0].address.substring(0, 7) + "...",
             miningBalance: "~" + Math.ceil(response[0].miningBalance / 10000000) + " waves",
-          //  timestamp: response[0].timestamp,
-            in: (response[0].timestamp - new Date())/1000 + " seconds"
+            //  timestamp: response[0].timestamp,
+            in: (response[0].timestamp - new Date()) / 1000 + " seconds"
           };
         })
         .catch((e) => {
@@ -174,6 +171,33 @@ class Main {
   refreshTable(data) {
     this.domNodes.innerHTML = this.renderNodes(data);
     new Tablesort(this.domNodes);
+  }
+
+  process(nodes) {
+    let objs = nodes;
+
+    let values = Object.values(objs);
+    let attrs = collectKeys(nodes);
+    let uniq = mergeAll(attrs.map((attr) => {
+      let o = {};
+      o[attr] = _.uniq(values.map((v) => v[attr] || "?"));
+      return o;
+    }));
+
+    for (let k in objs) {
+      for (let attr of attrs) {
+        let v = objs[k][attr];
+        objs[k][attr] = {
+          class: "class_common class_" + uniq[attr].indexOf(v),
+          value: v
+        };
+      }
+    }
+
+    return {
+      attrs: attrs,
+      nodes: objs
+    };
   }
 
   apiRequest(method, rest, action) {

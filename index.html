@@ -3,16 +3,50 @@
     <meta charset="utf-8">
     <link rel="stylesheet" href="third-party/tablesort-5.0.1/dist/tablesort.css"/>
     <style type="text/css">
-    table{
-        font-family: monospace;
-        border-collapse: collapse;
-    }
-    tr:nth-child(2n){
-        background: #f0f0f0;
-    }
-    td{
-        padding: 1em;
-    }
+        table {
+            font-family: monospace;
+            border-collapse: collapse;
+        }
+
+        tr:nth-child(2n) {
+            background: #f0f0f0;
+        }
+
+        td {
+            padding: 1em;
+        }
+
+        .class_common {
+            color: #FFF;
+        }
+
+        .class_0 {
+            background-color: #F8B195;
+        }
+
+        .class_1 {
+            background-color: #F67280;
+        }
+
+        .class_2 {
+            background-color: #C06C84;
+        }
+
+        .class_3 {
+            background-color: #6C5B7B;
+        }
+
+        .class_4 {
+            background-color: #355C7D;
+        }
+
+        .class_5 {
+            background-color: #2A363B;
+        }
+
+        .class_-1 {
+            background-color: #E84A5F;
+        }
     </style>
 </head>
 <body>
@@ -35,7 +69,7 @@
         <tr>
             <td>{{@key}}</td>
             {{#each this}}
-            <td>{{this}}</td>
+            <td class="{{class}}">{{value}}</td>
             {{/each}}
         </tr>
         {{/each}}
