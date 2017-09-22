@@ -16,6 +16,9 @@ class Main {
 
     let nodesTemplate = document.querySelector("#nodes-template").innerText;
     this.renderNodes = Handlebars.compile(nodesTemplate);
+
+    let init = _.mapValues(_.keyBy(nodes), () => {return {}});
+    this.refreshTable(this.process(init));
   }
 
   run() {
