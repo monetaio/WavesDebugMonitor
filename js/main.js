@@ -25,9 +25,10 @@ class Main {
     Promise
       .all([
         this.loadVersions(),
-        this.loadSeed(),
+        this.loadUtx(),
         this.loadDebugInfo(),
-        this.loadMinerInfo()
+        this.loadMinerInfo(),
+        this.loadHistoryInfo()
       ])
       .then((data) => mergeAll(data))
       .then((nodes) => {
@@ -84,7 +85,7 @@ class Main {
         })
         .catch((e) => {
           return {
-            stateHeight: e.message,
+            STATE: e.message,
             persisted: e.message,
             bottom: e.message,
             top: e.message,
@@ -122,7 +123,7 @@ class Main {
             address: response[0].address,
             miningBalance: "~" + Math.ceil(response[0].miningBalance / 10000000) + " waves",
             //  timestamp: response[0].timestamp,
-            in: (response[0].timestamp - new Date()) / 1000 + " seconds"
+            in: Math.round((response[0].timestamp - new Date()) / 1000) + " seconds"
           };
         })
         .catch((e) => {
