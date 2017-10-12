@@ -17,6 +17,10 @@
             font-size: 0.8em;
         }
 
+        .class_index {
+            width: 1.2em;
+        }
+
         .class_common {
             color: #FFF;
             max-width: 110px;
@@ -80,6 +84,7 @@
         <tbody>
         {{#each nodes}}
         <tr>
+            <td class="class_index">{{ @index }}</td>
             <td><a href="http://{{@key}}/api-docs/index.html" target="_blank">{{@key}}</a></td>
             {{#each this}}
             <td class="{{class}}">{{value}}</td>
