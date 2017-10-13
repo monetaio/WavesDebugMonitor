@@ -17,6 +17,15 @@
             font-size: 0.8em;
         }
 
+        .toggle {
+            padding: 0.3em 0.5em;
+        }
+
+        .toggle.working {
+            border: 0;
+            background: #eee;
+        }
+
         .class_common {
             color: #FFF;
             max-width: 110px;
@@ -64,8 +73,14 @@
 </head>
 <body>
 <label>API key: <input class="api-key" value="integration-test-rest-api"></label>
+
+Interval:
+<label><input type="radio" name="interval" class="interval" value="-1" checked />Single request</label>
+<label><input type="radio" name="interval" class="interval" value="5" />5s</label>
+<label><input type="radio" name="interval" class="interval" value="10" />10s</label>
+
+<button class="toggle" onclick="MainApp.toggle()">Collect</button>
 <table class="nodes"></table>
-<button class="collect" onclick="MainApp.run()">Collect</button>
 
 <script id="nodes-template" type="text/x-handlebars-template">
     <table class="nodes">

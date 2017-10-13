@@ -19,21 +19,49 @@ class Main {
 
     let init = _.mapValues(_.keyBy(nodes), () => {return {}});
     this.refreshTable(this.process(init));
+
+    this.intervalId = null;
+    this.domToggle = document.querySelector(".toggle");
   }
 
-  run() {
-    Promise
-      .all([
-        this.loadVersions(),
-        this.loadUtx(),
-        this.loadDebugInfo(),
-        this.loadMinerInfo(),
-        this.loadHistoryInfo()
-      ])
-      .then((data) => mergeAll(data))
-      .then((nodes) => {
-        this.refreshTable(this.process(nodes))
-      });
+  toggle() {
+    if (this.intervalId) {
+      clearTimeout(this.intervalId);
+      this.intervalId = null;
+      this.domToggle.classList.remove("working");
+    } else {
+      let interval = +Main.domInterval().value;
+      if (interval <= 0) this.runRequest();
+      else {
+        this.runIntervalRequests(interval * 1000);
+        this.domToggle.classList.add("working");
+      }
+    }
+  }
+
+  static domInterval() {
+    return document.querySelector(".interval:checked");
+  }
+
+  runIntervalRequests(interval) {
+    this.runRequest().then(() => {
+      this.intervalId = setTimeout(this.runIntervalRequests.bind(this, interval), interval);
+    });
+  }
+
+  runRequest() {
+    return Promise
+        .all([
+            this.loadVersions(),
+            this.loadUtx(),
+            this.loadDebugInfo(),
+            this.loadMinerInfo(),
+            this.loadHistoryInfo()
+        ])
+        .then((data) => mergeAll(data))
+        .then((nodes) => {
+            this.refreshTable(this.process(nodes))
+        });
   }
 
   loadVersions() {
