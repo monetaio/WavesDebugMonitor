@@ -27,7 +27,6 @@
         }
 
         .class_common {
-            color: #FFF;
             max-width: 110px;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -43,30 +42,37 @@
         }
 
         .class_0 {
+            color: #FFF;
             background-color: #F8B195;
         }
 
         .class_1 {
+            color: #FFF;
             background-color: #F67280;
         }
 
         .class_2 {
+            color: #FFF;
             background-color: #C06C84;
         }
 
         .class_3 {
+            color: #FFF;
             background-color: #6C5B7B;
         }
 
         .class_4 {
+            color: #FFF;
             background-color: #355C7D;
         }
 
         .class_5 {
+            color: #FFF;
             background-color: #2A363B;
         }
 
         .class_-1 {
+            color: #FFF;
             background-color: #E84A5F;
         }
     </style>
@@ -75,9 +81,9 @@
 <label>API key: <input class="api-key" value="integration-test-rest-api"></label>
 
 Interval:
-<label><input type="radio" name="interval" class="interval" value="-1" checked />Single request</label>
-<label><input type="radio" name="interval" class="interval" value="5" />5s</label>
-<label><input type="radio" name="interval" class="interval" value="10" />10s</label>
+<label><input type="radio" name="interval" class="interval" value="-1" checked/>Single request</label>
+<label><input type="radio" name="interval" class="interval" value="5"/>5s</label>
+<label><input type="radio" name="interval" class="interval" value="10"/>10s</label>
 
 <button class="toggle" onclick="MainApp.toggle()">Collect</button>
 <table class="nodes"></table>
@@ -86,7 +92,6 @@ Interval:
     <table class="nodes">
         <thead>
         <tr>
-            <th>&nbsp;</th>
             <th>node</th>
             {{#each attrs}}
             <th>{{this}}</th>
@@ -96,7 +101,6 @@ Interval:
         <tbody>
         {{#each nodes}}
         <tr>
-            <td class="class_index">{{ @index }}</td>
             <td><a href="http://{{@key}}/api-docs/index.html" target="_blank">{{@key}}</a></td>
             {{#each this}}
             <td class="{{class}}">{{value}}</td>

@@ -10,15 +10,13 @@ function collectKeys(objs) {
 
 class Main {
   constructor(nodes) {
-    this.nodes = nodes;
+    this.nodes = _.cloneDeep(nodes);
     this.domNodes = document.querySelector(".nodes");
     this.domApiKey = document.querySelector(".api-key");
 
     let nodesTemplate = document.querySelector("#nodes-template").innerText;
     this.renderNodes = Handlebars.compile(nodesTemplate);
-
-    let init = _.mapValues(_.keyBy(nodes), () => {return {}});
-    this.refreshTable(this.process(init));
+    this.refreshTable(this.process(_.cloneDeep(nodes)));
 
     this.intervalId = null;
     this.domToggle = document.querySelector(".toggle");
@@ -52,13 +50,14 @@ class Main {
   runRequest() {
     return Promise
         .all([
+            new Promise((resolve) => resolve(_.cloneDeep(this.nodes))),
             this.loadVersions(),
             this.loadUtx(),
             this.loadDebugInfo(),
             this.loadMinerInfo(),
             this.loadHistoryInfo()
         ])
-        .then((data) => mergeAll(data))
+        .then(mergeAll)
         .then((nodes) => {
             this.refreshTable(this.process(nodes))
         });
@@ -185,7 +184,7 @@ class Main {
   load(f) {
     return Promise
       .all(
-        this.nodes.map((node => {
+        Object.keys(this.nodes).map((node => {
           return f(node).then((r) => {
             let final = {};
             final[node] = r;
