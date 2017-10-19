@@ -6,32 +6,12 @@ if (process.argv.length < 3) {
 }
 
 const file = fs.readFileSync(process.argv[2], {encoding: 'UTF-8'}),
-  lines = file.split('\n'),
-  terraformSectionIndex = lines.indexOf('[aws-terraform]');
+  lines = file.split('\n');
 
 const regexp = /^(.+)\s+node_id=(-?\d+)/;
-let nodes = {
-  '34.251.200.245:6869': {
-    nodeId: 0
-  },
-  '34.251.200.245:16869': {
-    nodeId: 1
-  },
-  '35.157.212.173:6869': {
-    nodeId: 2
-  },
-  '35.157.212.173:16869': {
-    nodeId: 3
-  },
-  '13.229.61.140:6869': {
-    nodeId: 4
-  },
-  '13.229.61.140:16869': {
-    nodeId: 5
-  }
-};
+let nodes = {};
 
-for (let i = terraformSectionIndex + 1; i <= lines.length; i++) {
+for (let i = 0; i <= lines.length; i++) {
   const match = regexp.exec(lines[i]);
   if (match) {
     nodes[match[1].trim() + ':6869'] = {
