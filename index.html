@@ -101,9 +101,12 @@ Interval:
         <tbody>
         {{#each nodes}}
         <tr>
-            <td><a href="http://{{@key}}/api-docs/index.html" target="_blank">{{@key}}</a></td>
             {{#each this}}
-            <td class="{{class}}">{{value}}</td>
+                {{#if_eq @key 'nodeId'}}
+                <td><a href="http://{{@key}}/api-docs/index.html" target="_blank" title="{{@key}}">{{nodeId.value}}</a></td>
+                {{else}}
+                <td class="{{class}}">{{value}}</td>
+                {{/if_eq}}
             {{/each}}
         </tr>
         {{/each}}
