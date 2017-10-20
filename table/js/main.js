@@ -235,7 +235,7 @@ class Main {
   }
 
   static loadNodes() {
-    return Utils.jsonHttpRequest("GET", "data/nodes.json");
+    return Utils.jsonHttpRequest("GET", "../data/nodes.json");
   }
 }
 
