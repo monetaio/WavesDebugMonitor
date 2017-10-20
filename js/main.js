@@ -222,7 +222,7 @@ class Main {
     }
 
     return {
-      attrs: attrs,
+      attrs: _.without(attrs, 'nodeId'),
       nodes: objs
     };
   }
