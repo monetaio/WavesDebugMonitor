@@ -17,6 +17,18 @@
             font-size: 0.8em;
         }
 
+        .node .hovered {
+            display: none;
+        }
+
+        .node:hover .default {
+            display: none;
+        }
+
+        .node:hover .hovered {
+            display: inherit;
+        }
+
         .toggle {
             padding: 0.3em 0.5em;
         }
@@ -101,7 +113,10 @@ Interval:
         <tbody>
         {{#each nodes}}
         <tr>
-            <td><a href="http://{{@key}}/api-docs/index.html" target="_blank" title="{{@key}}">{{nodeId.value}}</a></td>
+            <td class="node">
+                <a href="http://{{@key}}/api-docs/index.html" target="_blank" class="default">{{nodeId.value}}</a>
+                <a href="http://{{@key}}/api-docs/index.html" target="_blank" class="hovered">{{@key}}</a>
+            </td>
             {{#each this}}
                 {{#if_eq @key 'nodeId'}}
                 {{else}}
