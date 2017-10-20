@@ -1,21 +1,21 @@
 {
-  "devnet-aws-nv-1.wavesnodes.com:6869": {
-    "nodeId": 1
-  },
-  "devnet-aws-ir-1.wavesnodes.com:6869": {
-    "nodeId": 0
-  },
-  "devnet-aws-fr-1.wavesnodes.com:6869": {
-    "nodeId": 2
-  },
-  "devnet-aws-fr-2.wavesnodes.com:6869": {
-    "nodeId": 3
-  },
   "devnet-aws-to-1.wavesnodes.com:6869": {
     "nodeId": 5
   },
   "devnet-aws-si-1.wavesnodes.com:6869": {
     "nodeId": 4
+  },
+  "devnet-aws-fr-2.wavesnodes.com:6869": {
+    "nodeId": 3
+  },
+  "devnet-aws-fr-1.wavesnodes.com:6869": {
+    "nodeId": 2
+  },
+  "devnet-aws-nv-1.wavesnodes.com:6869": {
+    "nodeId": 1
+  },
+  "devnet-aws-ir-1.wavesnodes.com:6869": {
+    "nodeId": 0
   },
   "18.194.86.234:6869": {
     "nodeId": -1

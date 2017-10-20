@@ -9,15 +9,24 @@ const file = fs.readFileSync(process.argv[2], {encoding: 'UTF-8'}),
   lines = file.split('\n');
 
 const regexp = /^(.+)\s+node_id=(-?\d+)/;
-let nodes = {};
-
-for (let i = 0; i <= lines.length; i++) {
+let nodesRaw = [];
+for (let i in lines) {
   const match = regexp.exec(lines[i]);
   if (match) {
-    nodes[match[1].trim() + ':6869'] = {
+    nodesRaw.push({
+      restUrl: match[1].trim() + ':6869',
       nodeId: +match[2]
-    };
+    });
   }
+}
+nodesRaw.sort((a, b) => b.nodeId - a.nodeId);
+
+let nodes = {};
+for (let i in nodesRaw) {
+  let node = nodesRaw[i];
+  nodes[node.restUrl] = {
+    nodeId: node.nodeId
+  };
 }
 
 const rootDir = path.normalize(path.dirname(process.argv[1]) + '/..'),
