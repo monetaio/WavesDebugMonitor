@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../third-party/tablesort-5.0.1/dist/tablesort.css"/>
+    <style type="text/css">
+        table {
+            font-family: monospace;
+            border-collapse: collapse;
+        }
+
+        tr:nth-child(2n) {
+            background: #f0f0f0;
+        }
+
+        td {
+            padding: 1em;
+            font-size: 0.8em;
+        }
+
+        .node .hovered {
+            display: none;
+        }
+
+        .node:hover .default {
+            display: none;
+        }
+
+        .node:hover .hovered {
+            display: inherit;
+        }
+
+        .toggle {
+            padding: 0.3em 0.5em;
+        }
+
+        .toggle.working {
+            border: 0;
+            background: #eee;
+        }
+
+        .class_common {
+            max-width: 110px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .class_common:hover {
+            position: absolute;
+            overflow: visible;
+            min-width: 110px;
+            max-width: initial;
+            background: #aaa;
+        }
+
+        .class_0 {
+            color: #FFF;
+            background-color: #F8B195;
+        }
+
+        .class_1 {
+            color: #FFF;
+            background-color: #F67280;
+        }
+
+        .class_2 {
+            color: #FFF;
+            background-color: #C06C84;
+        }
+
+        .class_3 {
+            color: #FFF;
+            background-color: #6C5B7B;
+        }
+
+        .class_4 {
+            color: #FFF;
+            background-color: #355C7D;
+        }
+
+        .class_5 {
+            color: #FFF;
+            background-color: #2A363B;
+        }
+
+        .class_-1 {
+            color: #FFF;
+            background-color: #E84A5F;
+        }
+    </style>
+</head>
+<body>
+<label>API key: <input class="api-key" value="integration-test-rest-api"></label>
+
+Interval:
+<label><input type="radio" name="interval" class="interval" value="-1" checked/>Single request</label>
+<label><input type="radio" name="interval" class="interval" value="5"/>5s</label>
+<label><input type="radio" name="interval" class="interval" value="10"/>10s</label>
+
+<button class="toggle" onclick="MainApp.toggle()">Collect</button>
+<table class="nodes"></table>
+
+<script id="nodes-template" type="text/x-handlebars-template">
+    <table class="nodes">
+        <thead>
+        <tr>
+            <th>node</th>
+            {{#each attrs}}
+            <th>{{this}}</th>
+            {{/each}}
+        </tr>
+        </thead>
+        <tbody>
+        {{#each nodes}}
+        <tr>
+            <td class="node">
+                <a href="http://{{@key}}/api-docs/index.html" target="_blank" class="default">{{nodeId.value}}</a>
+                <span class="hovered">
+                    <a href="#" onclick="Utils.copyTextToClipboard('{{@key}}'.split(':')[0]); return false;"
+                       title="Copy the host to clipboard">COPY</a>
+                    <a href="http://{{@key}}/api-docs/index.html" target="_blank">To REST</a>
+                </span>
+            </td>
+            {{#each this}}
+            {{#if_eq @key 'nodeId'}}
+            {{else}}
+            <td class="{{class}}">{{value}}</td>
+            {{/if_eq}}
+            {{/each}}
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
+</script>
+<script src="../third-party/lodash.min.js"></script>
+<script src="../third-party/handlebars-v4.0.10.min.js"></script>
+<script src="../third-party/tablesort-5.0.1/dist/tablesort.min.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/main.js"></script>
+<script src="js/form.js"></script>
+</body>
