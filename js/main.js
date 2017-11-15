@@ -77,20 +77,16 @@ class Main {
           return {
             STATE: response.stateHeight + "," + response.stateHash,
             persisted: response.blockchainDebugInfo.persisted.height + "," + response.blockchainDebugInfo.persisted.hash,
-            bottom: response.blockchainDebugInfo.bottom.height + "," + response.blockchainDebugInfo.bottom.hash,
-            top: response.blockchainDebugInfo.top.height + "," + response.blockchainDebugInfo.top.hash,
+            inMemory: response.blockchainDebugInfo.inMemory,
             microHash: response.blockchainDebugInfo.microBaseHash
-            //   lastBlockId : response.blockchainDebugInfo.lastBlockId
           };
         })
         .catch((e) => {
           return {
             STATE: e.message,
             persisted: e.message,
-            bottom: e.message,
-            top: e.message,
+            inMemory: e.message,
             microHash: e.message
-            //     lastBlockId : e.message
           };
         })
     });
