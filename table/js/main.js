@@ -54,8 +54,7 @@ class Main {
             this.loadVersions(),
             this.loadUtx(),
             this.loadDebugInfo(),
-            this.loadMinerInfo(),
-            this.loadHistoryInfo()
+            this.loadMinerInfo()
         ])
         .then(mergeAll)
         .then((nodes) => {
@@ -104,7 +103,7 @@ class Main {
           return {
             STATE: response.stateHeight + "," + response.stateHash,
             persisted: response.blockchainDebugInfo.persisted.height + "," + response.blockchainDebugInfo.persisted.hash,
-            inMemory: response.blockchainDebugInfo.inMemory,
+            inMemory: response.blockchainDebugInfo.inMemory.map(i => {return i.height + "," + i.hash}).join(", "),
             microHash: response.blockchainDebugInfo.microBaseHash
           };
         })
@@ -124,8 +123,8 @@ class Main {
       return this.apiRequest("GET", node, "/debug/historyInfo")
         .then((response) => {
           return {
-            lastMicros: response.microBlockIds.join("<br />"),
-            lastBlocks: response.lastBlockIds.join("<br />")
+            lastMicros: response.microBlockIds.join(" ~>"),
+            lastBlocks: response.lastBlockIds.join(" -> ")
           };
         })
         .catch((e) => {
@@ -145,7 +144,6 @@ class Main {
           return {
             address: response[0].address,
             miningBalance: "~" + Math.ceil(response[0].miningBalance / 10000000) + " waves",
-            //  timestamp: response[0].timestamp,
             in: Math.round((response[0].timestamp - new Date()) / 1000) + " seconds"
           };
         })
